@@ -5,11 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.dao.InventoryDao;
 import org.example.exceptions.UnknownFilmException;
 import org.example.exceptions.UnknownInventoryException;
+import org.example.exceptions.UnknownLanguageException;
 import org.example.exceptions.UnknownStoreException;
 import org.example.model.Inventory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -25,16 +27,18 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     public Collection<Inventory> getFilmInStore(int storeId) {
-        return null;
+        return inventoryDao.readAll().stream()
+                .filter(inventory -> inventory.getStoreId() == storeId)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public void recordInventory(Inventory inventory) throws UnknownFilmException, UnknownStoreException {
-
+    public void recordInventory(Inventory inventory) throws UnknownFilmException, UnknownStoreException, UnknownLanguageException {
+        inventoryDao.createInventory(inventory);
     }
 
     @Override
     public void deleteInventory(Inventory inventory) throws UnknownInventoryException {
-
+        inventoryDao.deleteInventory(inventory);
     }
 }

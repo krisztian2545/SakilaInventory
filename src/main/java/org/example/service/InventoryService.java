@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.exceptions.UnknownFilmException;
 import org.example.exceptions.UnknownInventoryException;
+import org.example.exceptions.UnknownLanguageException;
 import org.example.exceptions.UnknownStoreException;
 import org.example.model.Inventory;
 
@@ -12,7 +13,7 @@ public interface InventoryService {
     Collection<Inventory> getAllInventory();
     Collection<Inventory> getFilmInStore(int storeId);
 
-    void recordInventory(Inventory inventory) throws UnknownFilmException, UnknownStoreException;
+    void recordInventory(Inventory inventory) throws UnknownFilmException, UnknownStoreException, UnknownLanguageException;
     void deleteInventory(Inventory inventory) throws UnknownInventoryException;
 
 }

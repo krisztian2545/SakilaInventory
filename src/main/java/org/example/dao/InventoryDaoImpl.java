@@ -12,6 +12,7 @@ import org.example.exceptions.UnknownStoreException;
 import org.example.model.Inventory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
@@ -33,7 +34,7 @@ public class InventoryDaoImpl implements InventoryDao {
         InventoryEntity inventoryEntity;
 
         inventoryEntity = InventoryEntity.builder()
-                .film(queryFilm(inventory.getFilm(), inventory.getLanguage()))
+                .film(queryOrCreateFilm(inventory.getFilm(), inventory.getLanguage()))
                 .storeId(inventory.getStoreId())
                 .lastUpdate(new Timestamp((new Date()).getTime()))
                 .build();
@@ -48,24 +49,48 @@ public class InventoryDaoImpl implements InventoryDao {
         }
     }
 
-    protected FilmEntity queryFilm(String title, String language) throws UnknownFilmException, UnknownLanguageException {
+    protected FilmEntity queryOrCreateFilm(String title, String language) throws UnknownFilmException, UnknownLanguageException {
         Optional<FilmEntity> filmEntity = filmRepository.findByTitle(title).stream()
                 .filter(entity -> entity.getLanguage().getName().equals(language))
                 .findFirst();
 
         if (!filmEntity.isPresent()) {
-            log.info("No such film");
-            Optional<LanguageEntity> languageEntity = languageRepository.findByName(language);
-            if (!languageEntity.isPresent()) {
-                throw new UnknownLanguageException(language);
-            }
+            log.info("Film not found");
 
             filmEntity = Optional.ofNullable(FilmEntity.builder()
                     .title(title)
-                    .language(languageEntity.get())
+                    .language(queryLanguage(language))
+                    .rentalDuration(3)
+                    .rentalRate(new BigDecimal("4.99"))
+                    .replacementCost(new BigDecimal("19.99"))
+                    .lastUpdate(new Timestamp((new Date()).getTime()))
                     .build());
             filmRepository.save(filmEntity.get());
             log.info("Recorded new Film: {}, {}", title, language);
+        }
+        log.trace("Film entity: {}", filmEntity);
+
+        return filmEntity.get();
+    }
+
+    protected LanguageEntity queryLanguage(String language) throws UnknownLanguageException {
+        Optional<LanguageEntity> languageEntity = languageRepository.findByName(language);
+
+        if (!languageEntity.isPresent()) {
+            throw new UnknownLanguageException(language);
+        }
+        log.trace("Language entity: {}", languageEntity);
+
+        return languageEntity.get();
+    }
+
+    protected FilmEntity queryFilm(String title, String language) throws UnknownFilmException {
+        Optional<FilmEntity> filmEntity = filmRepository.findByTitle(title).stream()
+                .filter(entity -> entity.getLanguage().getName().equals(language))
+                .findFirst();
+
+        if (!filmEntity.isPresent()) {
+            throw new UnknownFilmException();
         }
         log.trace("Film entity: {}", filmEntity);
 
@@ -85,19 +110,32 @@ public class InventoryDaoImpl implements InventoryDao {
                 .collect(Collectors.toList());
     }
 
+//    @Override
+//    public void updateInventory(Inventory inventory, Inventory update) throws UnknownInventoryException, UnknownFilmException {
+//        log.info("Updating inventory {}", inventory);
+//        Optional<InventoryEntity> inventoryEntity = findFirstInventory(inventory);
+//        inventoryEntity.get().setLastUpdate(new Timestamp((new Date()).getTime()));
+//        inventoryRepository.save(inventoryEntity.get());
+//    }
+
     @Override
     public void deleteInventory(Inventory inventory) throws UnknownInventoryException {
         log.info("Deleting inventory {}", inventory);
+        Optional<InventoryEntity> inventoryEntity = findFirstInventory(inventory);
+        inventoryRepository.delete(inventoryEntity.get());
+    }
+
+    private Optional<InventoryEntity> findFirstInventory(Inventory inventory) throws UnknownInventoryException {
         Optional<InventoryEntity> inventoryEntity = StreamSupport.stream(inventoryRepository.findAll().spliterator(), false).filter(
                 entity -> {
                     return inventory.getFilm().equals(entity.getFilm().getTitle()) &&
                             inventory.getLanguage().equals(entity.getFilm().getLanguage().getName()) &&
                             inventory.getStoreId() == entity.getStoreId();
                 }
-        ).findAny();
+        ).findFirst();
         if (!inventoryEntity.isPresent()) {
             throw new UnknownInventoryException(String.format("Inventory not found %s", inventory), inventory);
         }
-        inventoryRepository.delete(inventoryEntity.get());
+        return inventoryEntity;
     }
 }

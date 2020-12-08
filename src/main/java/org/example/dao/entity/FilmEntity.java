@@ -31,12 +31,10 @@ public class FilmEntity {
 
     @ManyToOne
     @JoinColumn(name = "language_id")
-    @Column(name = "language_id")
     private LanguageEntity language;
 
     @ManyToOne
-    @JoinColumn(name = "language_id")
-    @Column(name = "original_language_id")
+    @JoinColumn(name = "language_id", insertable = false, updatable = false)
     private LanguageEntity originalLanguage;
 
     @Column(name = "rental_duration")
