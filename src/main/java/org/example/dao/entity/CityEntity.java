@@ -11,22 +11,21 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "inventory", schema = "sakila")
-public class InventoryEntity {
+@Table(name = "city", schema = "sakila")
+public class CityEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "inventory_id")
+    @Column(name="city_id")
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "film_id")
-    private FilmEntity film;
+    @Column(name="city")
+    private String name;
 
     @ManyToOne
-    @JoinColumn(name = "store_id")
-    private StoreEntity store;
+    @JoinColumn(name = "country_id")
+    private CountryEntity country;
 
-    @Column(name = "last_update")
+    @Column(name="last_update")
     private Timestamp lastUpdate;
 }
