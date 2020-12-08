@@ -11,5 +11,6 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class Inventory {
     private String film;
+    private String language;
     private int storeId;
 }
