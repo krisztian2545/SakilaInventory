@@ -2,8 +2,8 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.controller.dto.GetInventoryDto;
 import org.example.controller.dto.InventoryDto;
-import org.example.controller.dto.InventoryRecordOrDeleteRequestDto;
 import org.example.exceptions.UnknownFilmException;
 import org.example.exceptions.UnknownInventoryException;
 import org.example.exceptions.UnknownLanguageException;
@@ -25,18 +25,20 @@ public class InventoryController {
     private final InventoryService service;
 
     @GetMapping("/inventory")
-    public Collection<InventoryDto> listInventories() {
+    public Collection<GetInventoryDto> listInventories() {
         return service.getAllInventory()
                 .stream()
-                .map(model -> InventoryDto.builder()
+                .map(model -> GetInventoryDto.builder()
+                        .id(model.getId())
                         .film(model.getFilm())
+                        .language(model.getLanguage())
                         .storeId(model.getStoreId())
                         .build())
                 .collect(Collectors.toList());
     }
 
     @PostMapping("/inventory")
-    public void record(@RequestBody InventoryRecordOrDeleteRequestDto inventoryDto) {
+    public void record(@RequestBody InventoryDto inventoryDto) {
         try {
             service.recordInventory(new Inventory(
                     inventoryDto.getFilm(),
@@ -49,7 +51,7 @@ public class InventoryController {
     }
 
     @DeleteMapping("/inventory")
-    private void deleteFirstMatch(@RequestBody InventoryRecordOrDeleteRequestDto inventoryDto) {
+    private void deleteFirstMatch(@RequestBody InventoryDto inventoryDto) {
         try {
             service.deleteInventory(new Inventory(
                     inventoryDto.getFilm(),

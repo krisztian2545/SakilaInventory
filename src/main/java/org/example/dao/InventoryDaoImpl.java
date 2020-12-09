@@ -118,6 +118,7 @@ public class InventoryDaoImpl implements InventoryDao {
 
         return StreamSupport.stream(inventoryRepository.findAll().spliterator(), false)
                 .map(entity -> new Inventory(
+                        entity.getId(),
                         entity.getFilm().getTitle(),
                         entity.getFilm().getLanguage().getName(),
                         entity.getStore().getId()

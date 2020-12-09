@@ -3,14 +3,9 @@ package org.example.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.controller.dto.FilmDto;
-import org.example.controller.dto.InventoryDto;
-import org.example.controller.dto.InventoryRecordOrDeleteRequestDto;
-import org.example.exceptions.UnknownFilmException;
-import org.example.exceptions.UnknownInventoryException;
-import org.example.exceptions.UnknownLanguageException;
-import org.example.exceptions.UnknownStoreException;
+import org.example.controller.dto.GetFilmDto;
+import org.example.exceptions.*;
 import org.example.model.Film;
-import org.example.model.Inventory;
 import org.example.service.FilmService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +22,11 @@ public class FilmController {
     private final FilmService service;
 
     @GetMapping("/film")
-    public Collection<FilmDto> listInventories() {
+    public Collection<GetFilmDto> listInventories() {
         return service.getAllFilm()
                 .stream()
-                .map(model -> FilmDto.builder()
+                .map(model -> GetFilmDto.builder()
+                        .id(model.getId())
                         .title(model.getTitle())
                         .description(model.getDescription())
                         .releaseYear(model.getReleaseYear())
@@ -62,27 +58,15 @@ public class FilmController {
                     filmDto.getRating(),
                     filmDto.getSpecialFeatures()
             ));
-        } catch (UnknownLanguageException e) {
+        } catch (UnknownLanguageException | OutOfBoundsException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @DeleteMapping("/film")
-    private void deleteFirstMatch(@RequestBody FilmDto filmDto) {
+    private void deleteById(@RequestBody int id) {
         try {
-            service.deleteFilm(new Film(
-                    filmDto.getTitle(),
-                    filmDto.getDescription(),
-                    filmDto.getReleaseYear(),
-                    filmDto.getLanguage(),
-                    filmDto.getOriginalLanguage(),
-                    filmDto.getRentalDuration(),
-                    filmDto.getRentalRate(),
-                    filmDto.getLength(),
-                    filmDto.getReplacementCost(),
-                    filmDto.getRating(),
-                    filmDto.getSpecialFeatures()
-            ));
+            service.deleteFilm(id);
         } catch (UnknownFilmException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }

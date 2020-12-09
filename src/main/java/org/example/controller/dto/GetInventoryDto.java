@@ -9,8 +9,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InventoryDto {
-    private String film;
-    private String language;
-    private int storeId;
+public class GetInventoryDto extends InventoryDto {
+    private int id;
 }

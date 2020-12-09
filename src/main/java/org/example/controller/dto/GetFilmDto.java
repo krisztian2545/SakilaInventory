@@ -9,6 +9,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InventoryRecordOrDeleteRequestDto extends InventoryDto {
-    private String language;
+public class GetFilmDto extends FilmDto {
+    private int id;
 }

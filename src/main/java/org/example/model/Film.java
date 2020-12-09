@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @Getter
 @EqualsAndHashCode
 public class Film {
+    private int id;
     private String title;
     private String description;
     private int releaseYear;
@@ -23,4 +24,18 @@ public class Film {
     private BigDecimal replacementCost;
     private String rating;
     private String specialFeatures;
+
+    public Film(String title, String description, int releaseYear, String language, String originalLanguage, int rentalDuration, BigDecimal rentalRate, int length, BigDecimal replacementCost, String rating, String specialFeatures) {
+        this.title = title;
+        this.description = description;
+        this.releaseYear = releaseYear;
+        this.language = language;
+        this.originalLanguage = originalLanguage;
+        this.rentalDuration = rentalDuration;
+        this.rentalRate = rentalRate;
+        this.length = length;
+        this.replacementCost = replacementCost;
+        this.rating = rating;
+        this.specialFeatures = specialFeatures;
+    }
 }

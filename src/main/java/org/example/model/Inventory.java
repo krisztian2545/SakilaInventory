@@ -10,7 +10,14 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode
 public class Inventory {
+    private int id;
     private String film;
     private String language;
     private int storeId;
+
+    public Inventory(String film, String language, int storeId) {
+        this.film = film;
+        this.language = language;
+        this.storeId = storeId;
+    }
 }

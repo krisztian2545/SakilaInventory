@@ -30,6 +30,7 @@ public class FilmDaoImpl implements FilmDao {
 
         return StreamSupport.stream(filmRepository.findAll().spliterator(), false)
                 .map(entity -> new Film(
+                        entity.getId(),
                         entity.getTitle(),
                         entity.getDescription(),
                         entity.getReleaseYear(),
@@ -46,7 +47,7 @@ public class FilmDaoImpl implements FilmDao {
     }
 
     @Override
-    public void deleteFilm(Film film) throws UnknownFilmException {
+    public void deleteFilm(int id) throws UnknownFilmException {
 
     }
 }

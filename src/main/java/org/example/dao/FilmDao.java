@@ -9,5 +9,5 @@ import java.util.Collection;
 public interface FilmDao {
     void createFilm(Film film) throws UnknownLanguageException;
     Collection<Film> readAll();
-    void deleteFilm(Film film) throws UnknownFilmException;
+    void deleteFilm(int id) throws UnknownFilmException;
 }
