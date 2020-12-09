@@ -37,6 +37,19 @@ public class InventoryController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/inventory/{store_id}")
+    public Collection<GetInventoryDto> listInventoriesByStore(@PathVariable("store_id") int storeId) {
+        return service.getFilmInStore(storeId)
+                .stream()
+                .map(model -> GetInventoryDto.builder()
+                        .id(model.getId())
+                        .film(model.getFilm())
+                        .language(model.getLanguage())
+                        .storeId(model.getStoreId())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
     @PostMapping("/inventory")
     public void record(@RequestBody InventoryDto inventoryDto) {
         try {

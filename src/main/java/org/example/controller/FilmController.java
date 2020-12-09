@@ -26,7 +26,7 @@ public class FilmController {
     private final FilmService service;
 
     @GetMapping("/film")
-    public Collection<GetFilmDto> listInventories() {
+    public Collection<GetFilmDto> listFilms() {
         return service.getAllFilm()
                 .stream()
                 .map(model -> GetFilmDto.builder()
