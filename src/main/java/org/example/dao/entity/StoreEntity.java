@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name = "staff", schema = "sakila")
+@Table(name = "store", schema = "sakila")
 public class StoreEntity {
 
     @Id
@@ -20,7 +20,7 @@ public class StoreEntity {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name="staff_id")
+    @JoinColumn(name="manager_staff_id")
     private StaffEntity managerStaff;
 
     @ManyToOne

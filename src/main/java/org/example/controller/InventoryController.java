@@ -24,11 +24,6 @@ public class InventoryController {
 
     private final InventoryService service;
 
-    @GetMapping("/hello")
-    public String hello(@RequestParam(name = "name", defaultValue = "World", required = false) String name){
-        return String.format("Hello %s!", name);
-    }
-
     @GetMapping("/inventory")
     public Collection<InventoryDto> listInventories() {
         return service.getAllInventory()

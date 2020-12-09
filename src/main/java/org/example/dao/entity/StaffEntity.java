@@ -3,7 +3,6 @@ package org.example.dao.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Blob;
 import java.sql.Timestamp;
 
 @Data

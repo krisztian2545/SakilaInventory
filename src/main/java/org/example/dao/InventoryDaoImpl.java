@@ -31,6 +31,7 @@ public class InventoryDaoImpl implements InventoryDao {
     private final LanguageRepository languageRepository;
     private final StoreRepository storeRepository;
 
+    //////////////////// CREATE //////////////////////
     @Override
     public void createInventory(Inventory inventory)  throws UnknownFilmException, UnknownStoreException, UnknownLanguageException {
         InventoryEntity inventoryEntity;
@@ -110,9 +111,10 @@ public class InventoryDaoImpl implements InventoryDao {
         return storeEntity.get();
     }
 
+    //////////////////// READ //////////////////////
     @Override
     public Collection<Inventory> readAll() {
-        log.info("Reading all rows of the inventory");
+        log.info("Reading all rows of the inventory table");
 
         return StreamSupport.stream(inventoryRepository.findAll().spliterator(), false)
                 .map(entity -> new Inventory(
@@ -131,6 +133,7 @@ public class InventoryDaoImpl implements InventoryDao {
 //        inventoryRepository.save(inventoryEntity.get());
 //    }
 
+    //////////////////// DELETE //////////////////////
     @Override
     public void deleteInventory(Inventory inventory) throws UnknownInventoryException {
         log.info("Deleting inventory {}", inventory);
