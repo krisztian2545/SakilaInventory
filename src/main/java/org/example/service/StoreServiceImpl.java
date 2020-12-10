@@ -3,6 +3,7 @@ package org.example.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.dao.StoreDao;
+import org.example.exceptions.UnknownAddressException;
 import org.example.exceptions.UnknownStaffException;
 import org.example.exceptions.UnknownStoreException;
 import org.example.model.Store;
@@ -23,7 +24,7 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public void recordStore(Store store) throws UnknownStaffException {
+    public void recordStore(Store store) throws UnknownStaffException, UnknownAddressException {
         storeDao.createStore(store);
     }
 

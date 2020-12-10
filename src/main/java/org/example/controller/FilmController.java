@@ -112,8 +112,8 @@ public class FilmController {
         Set<String> noDuplicates = new HashSet<>();
 
         for (int i = 0; i < splitted.length; i++) {
-            if (Arrays.asList(correctFeatures).contains(splitted[i]))
-                noDuplicates.add(splitted[i]);
+            if (Arrays.asList(correctFeatures).contains(splitted[i].trim()))
+                noDuplicates.add(splitted[i].trim());
             else
                 throw new InvalidValueException("Special features has invalid value. Correct values: " + Arrays.toString(correctFeatures));
         }

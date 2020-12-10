@@ -2,10 +2,7 @@ package org.example.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.controller.dto.GetInventoryDto;
-import org.example.controller.dto.GetStoreDto;
-import org.example.controller.dto.InventoryDto;
-import org.example.controller.dto.StoreDto;
+import org.example.controller.dto.*;
 import org.example.exceptions.*;
 import org.example.model.Inventory;
 import org.example.model.Store;
@@ -41,17 +38,18 @@ public class StoreController {
     }
 
     @PostMapping("/store")
-    public void record(@RequestBody StoreDto storeDto) {
+    public void record(@RequestBody StoreRecordRequestDto storeDto) {
         try {
             service.recordStore(new Store(
                     storeDto.getManagerFirstName(),
                     storeDto.getManagerLastName(),
+                    storeDto.getManagerAddressId(),
                     storeDto.getAddress(),
                     storeDto.getDistrict(),
                     storeDto.getCity(),
                     storeDto.getCountry()
             ));
-        } catch (UnknownStaffException e) {
+        } catch (UnknownStaffException | UnknownAddressException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
